@@ -4,6 +4,7 @@
 #include <list>
 #include <set>
 #include <chrono>
+#include <algorithm>
 #include <iomanip>
 using namespace std;
 using namespace std::chrono;
@@ -15,6 +16,7 @@ int main() {
     list<string> l;
     set<string> s;
 
+    cout << "Measurement in Microseconds: " << endl;
     cout << setw(10) << "Operation" 
          << setw(10) << "Vector"
          << setw(10) << "List" 
@@ -44,8 +46,49 @@ int main() {
 
     cout << setw(10) << "Read" 
          << setw(10) << v_read 
-         << setw(1) << l_read 
-         << setw(12) << s_read << endl;
+         << setw(10) << l_read 
+         << setw(10) << s_read << endl;
 
-    return 0;
-}
+    // second race: SORTING
+    start = high_resolution_clock::now();
+    sort(v.begin(), v.end());
+    end = high_resolution_clock::now();
+    long long v_sort = duration_cast<microseconds>(end - start).count();
+
+    start = high_resolution_clock::now();
+    l.sort();
+    end = high_resolution_clock::now();
+    long long l_sort = duration_cast<microseconds>(end - start).count();
+
+    long long s_sort = -1; // set is already sorted
+    cout << setw(10) << "Sort" 
+         << setw(10) << v_sort 
+         << setw(10) << l_sort 
+         << setw(10) << s_sort << endl;
+
+    // third race: INSERTING
+    start = high_resolution_clock::now();
+    v.insert(v.begin() + v.size()/2, "TESTCODE");
+    end = high_resolution_clock::now();
+    long long v_ins = duration_cast<microseconds>(end - start).count();
+
+    start = high_resolution_clock::now();
+    auto itl = l.begin(); advance(itl, l.size()/2); l.insert(itl, "TESTCODE");
+    end = high_resolution_clock::now();
+    long long l_ins = duration_cast<microseconds>(end - start).count();
+
+    start = high_resolution_clock::now();
+    s.insert("TESTCODE");
+    end = high_resolution_clock::now();
+    long long s_ins = duration_cast<microseconds>(end - start).count();
+
+    cout << setw(10) << "Insert"
+         << setw(10) << v_ins 
+         << setw(10) << l_ins 
+         << setw(10) << s_ins << endl;
+
+    // fourth race: DELETING
+    start = high_resolution_clock::now();
+    v.erase(v.begin() + v.size()/2);
+    end = high_resolution_clock::now();
+    long long v_del = duration_cast<microseconds>(end - start).count();
