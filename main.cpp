@@ -92,3 +92,29 @@ int main() {
     v.erase(v.begin() + v.size()/2);
     end = high_resolution_clock::now();
     long long v_del = duration_cast<microseconds>(end - start).count();
+
+    start = high_resolution_clock::now();
+    itl = l.begin(); advance(itl, l.size()/2); l.erase(itl);
+    end = high_resolution_clock::now();
+    long long l_del = duration_cast<microseconds>(end - start).count();
+
+    start = high_resolution_clock::now();
+    auto its = s.begin(); advance(its, s.size()/2); s.erase(its);
+    end = high_resolution_clock::now();
+    long long s_del = duration_cast<microseconds>(end - start).count();
+
+    cout << setw(10) << "Delete" 
+         << setw(10) << v_del 
+         << setw(10) << l_del 
+         << setw(10) << s_del << endl;
+
+    return 0;
+}
+
+/* syntax examples:
+auto start = high_resolution_clock::now()
+auto end = high_resolution_clock::now()
+auto duration = duration_cast<milliseconds>(end - start)
+duration.count() references elapsed milliseconds
+*/
+   
